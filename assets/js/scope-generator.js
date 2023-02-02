@@ -6,45 +6,45 @@ function _hideLoading(){
 }
 
 function sendToScope(value) {
-    _hideLoading()
-    
-    var lines                       = value.split('\n');
-    var _topdomain                  = ""
-    if(lines.length !== 1){
-        for(var i = 0; i < lines.length; i++){
+    _hideLoading();
 
-            _getDomainWithoutSuffix = lines[i]
-                                            .replace("www.", "")
-                                            .replace("*.","")
-                                            .replace("http://","")
-                                            .replace("https://","")
-                                            .replace("/","")
-                                            .replace("*.","")
-                                            .split(".")
-            _lengths = _getDomainWithoutSuffix.length
+    const lines = value.split('\n');
+    let topdomain = "";
+    const matchallsubdo_html = document.querySelector('#_show_matchallsubdo');
+    const matchalldomainname_html = document.querySelector('#_show_matchalldomainname');
+    const matchallcontaintarget_html = document.querySelector('#_show_matchallcontaintarget');
 
-            if (_lengths > 2){
-                _topdomain = _getDomainWithoutSuffix.slice(1,_getDomainWithoutSuffix.length).join(".")
-            }else {
-                _topdomain = _getDomainWithoutSuffix[1]
+    matchallsubdo_html.innerHTML = "";
+    matchalldomainname_html.innerHTML = "";
+    matchallcontaintarget_html.innerHTML = "";
+
+    lines.forEach(line => {
+        const domainWithoutSuffix = line
+            .replace("www.", "")
+            .replace("*.", "")
+            .replace("http://", "")
+            .replace("https://", "")
+            .replace("/", "")
+            .replace("*.", "")
+            .split(".");
+
+        if (domainWithoutSuffix.length >= 2) {
+            const lengths = domainWithoutSuffix.length;
+            if (lengths > 2) {
+                topdomain = domainWithoutSuffix.slice(1, domainWithoutSuffix.length).join(".");
+            } else {
+                topdomain = domainWithoutSuffix[1];
             }
 
+            const for_matchallsubdo = `.*\\.${domainWithoutSuffix[0]}\\.${topdomain}$`;
+            const for_matchalldomainname = `.*\\.${domainWithoutSuffix[0]}\\..*$`;
+            const for_matchallcontaintarget = `(^|^[^:]+:\\/\\/|[^\\.]+\\.)${domainWithoutSuffix[0]}.*`;
 
-            const _for_matchallsubdo_hmtl = document.querySelector('#_show_matchallsubdo')
-            const _for_matchalldomainname_hmtl = document.querySelector('#_show_matchalldomainname')
-            const _for_matchallcontaintarget_hmtl = document.querySelector('#_show_matchallcontaintarget')
-            
-            _for_matchallsubdo          = ".*\\."+_getDomainWithoutSuffix[0]+"\\."+_topdomain+"$"
-            _for_matchalldomainname     = ".*\\."+_getDomainWithoutSuffix[0]+"\\..*$"
-            _for_matchallcontaintarget  = "(^|^[^:]+:\\/\\/|[^\\.]+\\.)"+_getDomainWithoutSuffix[0]+".*"
-            
-            _for_matchallsubdo_hmtl.innerHTML += _for_matchallsubdo+"<br>"
-            _for_matchalldomainname_hmtl.innerHTML += _for_matchalldomainname+"<br>"
-            _for_matchallcontaintarget_hmtl.innerHTML += _for_matchallcontaintarget+"<br>"
-            
+            matchallsubdo_html.innerHTML += `${for_matchallsubdo}<br>`;
+            matchalldomainname_html.innerHTML += `${for_matchalldomainname}<br>`;
+            matchallcontaintarget_html.innerHTML += `${for_matchallcontaintarget}<br>`;
         }
-    }
-
+    });
 }
 
 function copyToclip(id) {
